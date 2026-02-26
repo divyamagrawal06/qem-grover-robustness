@@ -1,1 +1,1 @@
-# QEM-Grover Robustness — backend package root
+"""Backend package root for qem-grover-robustness."""
