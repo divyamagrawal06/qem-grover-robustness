@@ -1,26 +1,317 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink-900: #14202b;
+  --ink-700: #2f4858;
+  --ink-500: #516d82;
+  --paper: #f7f2e8;
+  --paper-strong: #fffaf2;
+  --accent-a: #2a9d8f;
+  --accent-b: #e76f51;
+  --accent-c: #264653;
+  --line: rgba(20, 32, 43, 0.12);
+  --font-heading: "Trebuchet MS", "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: "Consolas", "Cascadia Mono", "Courier New", monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background:
+    radial-gradient(1400px 760px at -10% -20%, #ffe4ba 0%, transparent 55%),
+    radial-gradient(900px 520px at 120% 0%, #cae7df 0%, transparent 65%),
+    linear-gradient(165deg, #f6f0e4 0%, #efe6d6 100%);
+  color: var(--ink-900);
+  font-family: var(--font-heading), "Segoe UI", sans-serif;
+}
+
+.dashboard-shell {
+  padding: 1.1rem;
+}
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: 2.4fr 1fr;
+  gap: 1rem;
+  padding: 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 250, 242, 0.72);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 40px rgba(47, 72, 88, 0.12);
+  animation: slide-in 520ms ease;
+}
+
+.kicker {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  color: var(--ink-500);
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.hero-panel h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(1.7rem, 2.6vw, 2.8rem);
+  line-height: 1.06;
+}
+
+.hero-panel p {
+  margin: 0.6rem 0 0;
+  max-width: 68ch;
+}
+
+.status-block {
+  align-self: center;
+  justify-self: stretch;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.9rem;
+  background: rgba(42, 157, 143, 0.08);
+}
+
+.status-label {
+  display: block;
+  text-transform: uppercase;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.73rem;
+  color: var(--ink-500);
+}
+
+.error-text {
+  margin: 0.45rem 0 0;
+  color: #9a2f1d;
+  font-size: 0.85rem;
+}
+
+.dashboard-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255, 250, 242, 0.82);
+  box-shadow: 0 12px 32px rgba(47, 72, 88, 0.08);
+  padding: 1rem;
+  animation: fade-up 420ms ease;
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.02rem;
+}
+
+.controls {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.62rem;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.36rem;
+  font-size: 0.9rem;
+}
+
+.controls input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent-c);
+}
+
+.controls select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 0.35rem 0.45rem;
+  background: #fffaf2;
+  color: var(--ink-900);
+}
+
+.checkbox-row {
+  flex-direction: row;
+  align-items: center;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 0.58rem 0.7rem;
+  background: var(--accent-c);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button.secondary {
+  background: var(--accent-a);
+}
+
+.model-pill {
+  margin-top: 0.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(38, 70, 83, 0.06);
+  padding: 0.6rem;
+}
+
+.model-pill p {
+  margin: 0.08rem 0;
+  font-size: 0.85rem;
+}
+
+.metrics {
+  grid-column: span 9;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.metric-grid article {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  padding: 0.58rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.metric-grid span {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-500);
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.metric-grid strong {
+  font-size: 1rem;
+}
+
+.chart-card {
+  grid-column: span 6;
+}
+
+.wide {
+  grid-column: span 12;
+}
+
+.probability-field {
+  width: 100%;
+  height: 380px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.three-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.three-toggle {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.three-toggle button {
+  background: rgba(20, 32, 43, 0.08);
+  color: var(--ink-900);
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.65rem;
+}
+
+.three-toggle button.active {
+  background: var(--accent-c);
+  color: white;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .hero-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .controls,
+  .metrics,
+  .chart-card,
+  .wide {
+    grid-column: span 12;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard-shell {
+    padding: 0.7rem;
+  }
+
+  .button-row {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .probability-field {
+    height: 300px;
+  }
 }
